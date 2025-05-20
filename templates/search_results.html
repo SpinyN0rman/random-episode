@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Results</h1>
+{% if results == "None" %}
+    <p>No results, try searching again</p>
+{% else %}
+    {% for result in results %}
+        <p><b>{{ result.show_name }}</b> (id: {{ result.show_id }})</p>
+    {% endfor %}
+{% endif %}
+{% endblock %}

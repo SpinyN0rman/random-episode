@@ -19,7 +19,7 @@ def tvdb_search(search_term):
             "show_synopsis": show_synopsis,
         }
         shows.append(show)
-    return shows
+    return shows[:10]
 
 def tvdb_episodes(show_id):
     show = tvdb.get_series_extended(show_id)
