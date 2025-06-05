@@ -32,7 +32,7 @@ def tvdb_episodes(show_id):
     rand_episode_index = random.randrange(0, len(rand_season_info["episodes"]))
     rand_episode = rand_season_info["episodes"][rand_episode_index]
 
-    return (show, rand_episode)
+    return show, rand_episode
 
 if __name__ == "__main__":
     # print(tvdb.search("The West Wing"))

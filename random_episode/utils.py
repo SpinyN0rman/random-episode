@@ -9,16 +9,18 @@ def tvdb_search(search_term):
     results = tvdb.search(search_term)
     shows = []
     for result in results:
-        try:
-            show_synopsis = result["overview"]
-        except KeyError:
-            show_synopsis = "no synopsis"
-        show = {
-            "show_name": result["name"],
-            "show_id": result["tvdb_id"],
-            "show_synopsis": show_synopsis,
-        }
-        shows.append(show)
+        if result["type"] == "series":
+            try:
+                show_synopsis = result["overview"]
+            except KeyError:
+                show_synopsis = "no synopsis"
+            show = {
+                "show_name": result["name"],
+                "show_id": result["tvdb_id"],
+                "show_synopsis": show_synopsis,
+                "show_art": result["image_url"]
+            }
+            shows.append(show)
     return shows[:10]
 
 def tvdb_episodes(show_id):

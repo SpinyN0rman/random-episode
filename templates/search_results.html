@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
+{% block title %}Search results{% endblock %}
+
 {% block content %}
 <h1>Results</h1>
+{% include 'search_macro.html' %}
 {% if results == "None" %}
     <p>No results, try searching again</p>
 {% else %}
     {% for result in results %}
-        <p><b>{{ result.show_name }}</b> (id: {{ result.show_id }})</p>
+        <p><a href="{% url 'random_episode' %}?show_id={{ result.show_id }}">{{ result.show_name }}</a> (id: {{ result.show_id }})</p>
     {% endfor %}
 {% endif %}
 {% endblock %}
