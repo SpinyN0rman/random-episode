@@ -2,16 +2,15 @@
 {% block title %}Random episode{% endblock %}
 
 {% block content %}
-<h1>Your random episode</h1>
+<h1>Your random episode of {{ show.name }}</h1>
 <div class="container">
     <div class="row">
         <div class="col-sm-8">
-            <h2>{{ show.name }}</h2>
-            <p><b>{{ episode.name }}</b></p>
-            <p>Season {{ episode.seasonNumber }}, episode {{ episode.number }}</p>
+            <h2>{{ episode.name }}</h2>
+            <p><strong>Season {{ episode.seasonNumber }}, episode {{ episode.number }}</strong> (S{{ episode.seasonNumber|stringformat:"02d" }}E{{ episode.number|stringformat:"02d" }})</p>
             <p><em>{{ episode.overview }}</em></p>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-4 align-self-end">
             <img class="img-fluid img-thumbnail" src="{{ episode.image }}">
         </div>
     </div>
