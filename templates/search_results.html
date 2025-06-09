@@ -8,7 +8,7 @@
     <p>No results, try searching again</p>
 {% else %}
     {% for result in results %}
-        <p><a href="{% url 'random_episode' %}?show_id={{ result.show_id }}">{{ result.show_name }}</a> (id: {{ result.show_id }})</p>
+        <p><a href="{% url 'random_episode' %}?show_id={{ result.show_id }}">{{ result.show_name }}</a></p>
     {% endfor %}
 {% endif %}
 {% endblock %}
