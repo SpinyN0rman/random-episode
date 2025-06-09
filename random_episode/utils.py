@@ -12,7 +12,7 @@ def tvdb_search(search_term):
             try:
                 show_synopsis = result["overview"]
             except KeyError:
-                show_synopsis = "no synopsis"
+                show_synopsis = "No synopsis"
             show = {
                 "show_name": result["name"],
                 "show_id": result["tvdb_id"],
