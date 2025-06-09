@@ -2,13 +2,21 @@
 {% block title %}Search results{% endblock %}
 
 {% block content %}
-<h1>Results</h1>
+<h1>Shows</h1>
 {% include 'search_macro.html' %}
 {% if results == "None" %}
     <p>No results, try searching again</p>
 {% else %}
     {% for result in results %}
-        <p><a href="{% url 'random_episode' %}?show_id={{ result.show_id }}">{{ result.show_name }}</a></p>
+        <div class="row align-items-start pb-4">
+            <div class="col-2">
+                <a href="{% url 'random_episode' %}?show_id={{ result.show_id }}"><img class="img-fluid" style="width:120px" src="{{ result.show_art }}"></a>
+            </div>
+            <div class="col">
+                <p class="h4"><a href="{% url 'random_episode' %}?show_id={{ result.show_id }}">{{ result.show_name }}</a></p>
+                <p><em>{{ result.show_synopsis }}</em></p>
+            </div>
+        </div>
     {% endfor %}
 {% endif %}
 {% endblock %}
