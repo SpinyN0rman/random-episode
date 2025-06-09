@@ -30,7 +30,10 @@ def tvdb_episodes(show_id):
             season_ids.append(season["id"])
     rand_season_id = season_ids[random.randrange(0, len(season_ids))]
     rand_season_info = tvdb.get_season_extended(rand_season_id)
-    rand_episode_index = random.randrange(0, len(rand_season_info["episodes"]))
+    try:
+        rand_episode_index = random.randrange(0, len(rand_season_info["episodes"]))
+    except ValueError as e:
+        print(f"Encountered an error: {e}")
     rand_episode = rand_season_info["episodes"][rand_episode_index]
 
     return show, rand_episode
