@@ -12,11 +12,11 @@
         </div>
         <div class="col-sm-4 align-self-end">
             {% if episode.image|stringformat:"s" != "None" %}
-                <img class="img-fluid img-thumbnail" src="{{ episode.image }}">
+                <img class="img-fluid img-thumbnail mb-3" src="{{ episode.image }}">
             {% endif %}
         </div>
     </div>
 </div>
-<p><a class="btn btn-primary" href="" role="button">Get another episode</a></p>
+<p><a class="btn btn-primary mt-2" href="" role="button">Get another episode</a></p>
 <p><a class="btn btn-secondary" href="{% url 'home' %}" role="button">Search for another show</a></p>
 {% endblock %}
