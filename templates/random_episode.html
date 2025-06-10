@@ -11,7 +11,9 @@
             <p><em>{{ episode.overview }}</em></p>
         </div>
         <div class="col-sm-4 align-self-end">
-            <img class="img-fluid img-thumbnail" src="{{ episode.image }}">
+            {% if episode.image|stringformat:"s" != "None" %}
+                <img class="img-fluid img-thumbnail" src="{{ episode.image }}">
+            {% endif %}
         </div>
     </div>
 </div>
