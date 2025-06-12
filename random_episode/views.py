@@ -36,12 +36,6 @@ class AboutView(generic.TemplateView):
 def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
-        print("off we go!")
-        print(form["name"])
-        print(form["email"])
-        print(form["subject"])
-        print(form["message"])
-        print(form.is_valid())
         if form.is_valid():
             name = form.cleaned_data["name"]
             email = form.cleaned_data["email"]
@@ -57,10 +51,7 @@ def contact(request):
             email_message = EmailMessage(f"New Random Episode Form: {subject}",
                                          message_body, to=[os.getenv("ADMIN_EMAIL")])
 
-            print("we're about to send!")
             email_message.send()
 
             messages.success(request, "Form submitted successfully, thank you!")
-        else:
-            print("I guess it wasn't valid")
     return render(request, "contact.html")
