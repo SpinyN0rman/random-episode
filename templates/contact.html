@@ -3,4 +3,34 @@
 
 {% block content %}
 <h1>Contact</h1>
+<p>
+    Want to say "Hi", or let us know about a bug you've found? Drop us a message using the form below.
+</p>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group mb-3">
+        <label for="name">Name:</label>
+        <input class="form-control" type="text" id="name" name="name" placeholder="Your Name" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="email">Email:</label>
+        <input class="form-control" type="email" id="email" name="email" placeholder="name@example.com" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="subject">Subject:</label>
+        <input class="form-control" type="text" id="subject" name="subject" placeholder="Email Subject" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="message">Message</label>
+        <textarea class="form-control" id="message" name="message" placeholder="Write your message here" style="height: 100px"></textarea>
+    </div>
+    <button class="btn btn-primary mb-4" type="submit">Submit</button>
+    {% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+</form>
 {% endblock %}

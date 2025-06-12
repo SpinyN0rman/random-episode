@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.views import generic
 from . import utils
+from .forms import ContactForm
+from django.contrib import messages
+from django.core.mail import EmailMessage
+import os
 
 class HomePageView(generic.TemplateView):
     template_name = 'home.html'
@@ -28,5 +32,35 @@ def random_episode(request):
 class AboutView(generic.TemplateView):
     template_name = 'about.html'
 
-class ContactView(generic.TemplateView):
-    template_name = 'contact.html'
+
+def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        print("off we go!")
+        print(form["name"])
+        print(form["email"])
+        print(form["subject"])
+        print(form["message"])
+        print(form.is_valid())
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            subject = form.cleaned_data["subject"]
+            message = form.cleaned_data["message"]
+
+            message_body = f"New contact form submission from: {name}\n\n" \
+                            f"Email: {email}\n" \
+                            f"Their message:\n\n" \
+                            f"{subject}\n" \
+                            f"{message}"
+
+            email_message = EmailMessage(f"New Random Episode Form: {subject}",
+                                         message_body, to=[os.getenv("ADMIN_EMAIL")])
+
+            print("we're about to send!")
+            email_message.send()
+
+            messages.success(request, "Form submitted successfully, thank you!")
+        else:
+            print("I guess it wasn't valid")
+    return render(request, "contact.html")
