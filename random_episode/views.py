@@ -4,6 +4,7 @@ from . import utils
 from .forms import ContactForm
 from django.contrib import messages
 from django.core.mail import EmailMessage
+from django.core.mail import send_mail
 import os
 
 class HomePageView(generic.TemplateView):
@@ -49,7 +50,7 @@ def contact(request):
                             f"{message}"
 
             email_message = EmailMessage(f"New Random Episode Form: {subject}",
-                                         message_body, to=[os.getenv("ADMIN_EMAIL")])
+                                          message_body, to=[os.getenv("ADMIN_EMAIL")])
 
             email_message.send()
 
