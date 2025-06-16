@@ -8,7 +8,11 @@
         <div class="col-sm-8">
             <h2>{{ episode.name }}</h2>
             <p><strong>Season {{ episode.seasonNumber }}, episode {{ episode.number }}</strong> (S{{ episode.seasonNumber|stringformat:"02d" }}E{{ episode.number|stringformat:"02d" }})</p>
-            <p><em>{{ episode.overview }}</em></p>
+            {% if episode.overview|stringformat:"s" != "None" %}
+                <p><em>{{ episode.overview }}</em></p>
+            {% else %}
+                <p><em>No episode description available.</em></p>
+            {% endif %}
         </div>
         <div class="col-sm-4 align-self-end">
             {% if episode.image|stringformat:"s" != "None" %}
