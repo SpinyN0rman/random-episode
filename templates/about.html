@@ -3,4 +3,19 @@
 
 {% block content %}
 <h1>About</h1>
+<p>
+    Hi, I'm <a href="https://northrop.uk" target="_blank">Andi</a> 👋🏻
+</p>
+<p>
+    This site is a project I cooked up to put some learning into practice. I'd been learning Python, hence this site being built on Django.
+</p>
+<p>
+    The basic version of the site uses the <a href="https://thetvdb.com/api-information" target="_blank">TVDB's API</a> to allow users to search for
+a show. After selecting their chosen show we pick a random episode from the available seasons and episodes.
+<p>
+    In future updates I intend to add user accounts so that users can store favourites and watched episodes etc.
+</p>
+<p>
+    Feel free to check out the source over on GitHub: <a href="https://github.com/SpinyN0rman/random-episode/" target="_blank">https://github.com/SpinyN0rman/random-episode</a>, and if you spot an issue, please use the <a href="{% url 'contact' %}">Contact form</a>, or file an issue!
+</p>
 {% endblock %}
