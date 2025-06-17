@@ -23,11 +23,13 @@ def search_results(request):
 def random_episode(request):
     episode = "None"
     show = "None"
+    eng_name = "None"
+    eng_episode_deets = "None"
     if request.method == "GET":
         show_id = request.GET.get("show_id", "")
         if show_id != "":
-            show, episode = utils.tvdb_episodes(show_id)
-    return render(request, "random_episode.html", {'show': show, 'episode': episode})
+            show, episode, eng_name, eng_episode_deets = utils.tvdb_episodes(show_id)
+    return render(request, "random_episode.html", {'show': show, 'episode': episode, 'eng_name': eng_name, 'eng_episode_deets': eng_episode_deets})
 
 
 class AboutView(generic.TemplateView):
