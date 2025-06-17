@@ -45,10 +45,11 @@ def tvdb_episodes(show_id):
     rand_episode = rand_season_info["episodes"][rand_episode_index]
 
     # Find the English alias
-    eng_name = "None"
-    for alias in show["aliases"]:
-        if alias["language"]  == "eng":
-            eng_name = alias["name"]
+    try:
+        eng_show = tvdb.get_series_translation(show_id, "eng")
+        eng_name = eng_show["name"]
+    except KeyError:
+        eng_name = "None"
 
     # Get English episode title and overview
     try:
