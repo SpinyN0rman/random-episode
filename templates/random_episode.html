@@ -2,7 +2,7 @@
 {% block title %}Random episode{% endblock %}
 
 {% block content %}
-<h1>Your random episode of {{ show.name }}</h1>
+<h1>Your random episode of {% if eng_name|stringformat:"s" != None %}{{ eng_name }}{% else %}{{show.name }}{% endif %}</h1>
 <div class="container">
     <div class="row">
         <div class="col-sm-8">

@@ -10,11 +10,18 @@ def tvdb_search(search_term):
     for result in results:
         if result["type"] == "series":
             try:
-                show_synopsis = result["overview"]
+                show_name = result["translations"]["eng"]
             except KeyError:
-                show_synopsis = "No synopsis"
+                show_name = result["name"]
+            try:
+                show_synopsis = result["overviews"]["eng"]
+            except KeyError:
+                try:
+                    show_synopsis = result["overview"]
+                except KeyError:
+                    show_synopsis = "No synopsis"
             show = {
-                "show_name": result["name"],
+                "show_name": show_name,
                 "show_id": result["tvdb_id"],
                 "show_synopsis": show_synopsis,
                 "show_art": result["image_url"]
@@ -37,7 +44,13 @@ def tvdb_episodes(show_id):
         print(f"Encountered an error: {e}")
     rand_episode = rand_season_info["episodes"][rand_episode_index]
 
-    return show, rand_episode
+    # Find the English alias
+    eng_name = "None"
+    for alias in show["aliases"]:
+        if alias["language"]  == "eng":
+            eng_name = alias["name"]
+
+    return show, rand_episode, eng_name
 
 # if __name__ == "__main__":
 #     # print(tvdb.search("The West Wing"))
