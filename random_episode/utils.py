@@ -50,7 +50,13 @@ def tvdb_episodes(show_id):
         if alias["language"]  == "eng":
             eng_name = alias["name"]
 
-    return show, rand_episode, eng_name
+    # Get English episode title and overview
+    try:
+        eng_episode_deets = tvdb.get_episode_translation(rand_episode["id"], "eng")
+    except KeyError:
+        eng_episode_deets = "None"
+
+    return show, rand_episode, eng_name, eng_episode_deets
 
 # if __name__ == "__main__":
 #     # print(tvdb.search("The West Wing"))

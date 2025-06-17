@@ -2,14 +2,14 @@
 {% block title %}Random episode{% endblock %}
 
 {% block content %}
-<h1>Your random episode of {% if eng_name|stringformat:"s" != None %}{{ eng_name }}{% else %}{{show.name }}{% endif %}</h1>
+<h1>Your random episode of {% if eng_name|stringformat:"s" != "None" %}{{ eng_name }}{% else %}{{ show.name }}{% endif %}</h1>
 <div class="container">
     <div class="row">
         <div class="col-sm-8">
-            <h2>{{ episode.name }}</h2>
+            <h2>{% if eng_episode_deets|stringformat:"s" != "None" %}{{ eng_episode_deets.name }}{% else %}{{ episode.name }}{% endif %}</h2>
             <p><strong>Season {{ episode.seasonNumber }}, episode {{ episode.number }}</strong> (S{{ episode.seasonNumber|stringformat:"02d" }}E{{ episode.number|stringformat:"02d" }})</p>
             {% if episode.overview|stringformat:"s" != "None" %}
-                <p><em>{{ episode.overview }}</em></p>
+                <p><em>{% if eng_episode_deets|stringformat:"s" != "None" %}{{ eng_episode_deets.overview }}{% else %}{{ episode.overview }}{% endif %}</em></p>
             {% else %}
                 <p><em>No episode description available.</em></p>
             {% endif %}
