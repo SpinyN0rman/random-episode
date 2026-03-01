@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}My history{% endblock %}
+
+{% block content %}
+<h1>My roll history</h1>
+{% if rolls %}
+<ul class="list-unstyled">
+    {% for roll in rolls %}
+    <li class="pb-2 mb-2 border-bottom">
+        <a href="{% url 'random_episode' %}?show_id={{ roll.tvdb_show_id }}">{{ roll.show_name }}</a>
+        — Season {{ roll.season_number }}, Episode {{ roll.episode_number }}
+        {% if roll.episode_title %} ({{ roll.episode_title }}){% endif %}
+        <span class="text-muted small">{{ roll.rolled_at|date:"M j, Y g:i A" }}</span>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Your random episode rolls will appear here.</p>
+<p><a href="{% url 'home' %}">Pick a show</a> and roll an episode while logged in.</p>
+{% endif %}
+{% endblock %}

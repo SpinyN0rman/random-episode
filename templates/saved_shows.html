@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}My saved shows{% endblock %}
+
+{% block content %}
+<h1>My saved shows</h1>
+{% if saved_shows %}
+<ul class="list-unstyled">
+    {% for saved in saved_shows %}
+    <li class="pb-3 border-bottom mb-3">
+        <a href="{% url 'random_episode' %}?show_id={{ saved.tvdb_show_id }}">{{ saved.show_name }}</a>
+        <form method="post" action="{% url 'unsave_show' %}?next={{ request.path }}" class="d-inline ms-2">
+            {% csrf_token %}
+            <input type="hidden" name="show_id" value="{{ saved.tvdb_show_id }}">
+            <button type="submit" class="btn btn-outline-secondary btn-sm">Remove</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You haven't saved any shows yet. Search for a show and use "Save" to add it here.</p>
+<p><a href="{% url 'search_results' %}">Search for a show</a></p>
+{% endif %}
+{% endblock %}
