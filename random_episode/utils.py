@@ -1,10 +1,21 @@
-import os, random
+import os
+import random
+
 import tvdb_v4_official
 
-tvdb_api = os.getenv("TVDB_API_KEY")
-tvdb = tvdb_v4_official.TVDB(tvdb_api)
+_tvdb = None
+
+
+def _get_tvdb():
+    """Lazy-initialize TVDB client so manage.py migrate etc. don't require API key."""
+    global _tvdb
+    if _tvdb is None:
+        _tvdb = tvdb_v4_official.TVDB(os.getenv("TVDB_API_KEY"))
+    return _tvdb
+
 
 def tvdb_search(search_term):
+    tvdb = _get_tvdb()
     results = tvdb.search(search_term)
     shows = []
     for result in results:
@@ -30,6 +41,7 @@ def tvdb_search(search_term):
     return shows[:10]
 
 def tvdb_episodes(show_id):
+    tvdb = _get_tvdb()
     show = tvdb.get_series_extended(show_id)
     season_ids = []
     for season in show["seasons"]:

@@ -145,3 +145,13 @@ ANYMAIL = {
 EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 DEFAULT_FROM_EMAIL = 'randomepisode@mail.northrop.uk'
 SERVER_EMAIL = 'random-server@mail.northrop.uk'
+
+# Custom user model (email-based login)
+AUTH_USER_MODEL = 'random_episode.User'
+AUTHENTICATION_BACKENDS = [
+    'random_episode.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = '/accounts/login/'

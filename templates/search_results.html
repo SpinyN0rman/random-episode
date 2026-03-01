@@ -9,7 +9,25 @@
 {% else %}
     {% for result in results %}
         <div class="row align-items-start pb-4">
-                <p class="h4"><a href="{% url 'random_episode' %}?show_id={{ result.show_id }}">{{ result.show_name }}</a></p>
+                <p class="h4">
+                    <a href="{% url 'random_episode' %}?show_id={{ result.show_id }}">{{ result.show_name }}</a>
+                    {% if user.is_authenticated %}
+                        {% if result.show_id in saved_show_ids %}
+                        <form method="post" action="{% url 'unsave_show' %}?next={{ request.get_full_path }}" class="d-inline ms-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="show_id" value="{{ result.show_id }}">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Unsave</button>
+                        </form>
+                        {% else %}
+                        <form method="post" action="{% url 'save_show' %}?next={{ request.get_full_path }}" class="d-inline ms-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="show_id" value="{{ result.show_id }}">
+                            <input type="hidden" name="show_name" value="{{ result.show_name }}">
+                            <button type="submit" class="btn btn-outline-primary btn-sm">Save</button>
+                        </form>
+                        {% endif %}
+                    {% endif %}
+                </p>
                 <div class="clearfix">
                     <a href="{% url 'random_episode' %}?show_id={{ result.show_id }}"><img class="col-3 col-md-2 float-start mb-3 me-3" src="{{ result.show_art }}"></a>
                     <p><em>{{ result.show_synopsis }}</em></p>
