@@ -42,7 +42,13 @@ def tvdb_episodes(show_id):
         rand_episode_index = random.randrange(0, len(rand_season_info["episodes"]))
     except ValueError as e:
         print(f"Encountered an error: {e}")
-    rand_episode = rand_season_info["episodes"][rand_episode_index]
+
+    return rand_season_id, rand_episode_index
+
+def tvdb_episode_load(show_id, season_id, episode_num):
+    show = tvdb.get_series_extended(show_id)
+    season_info = tvdb.get_season_extended(season_id)
+    episode = season_info["episodes"][int(episode_num)]
 
     # Find the English alias
     try:
@@ -53,11 +59,11 @@ def tvdb_episodes(show_id):
 
     # Get English episode title and overview
     try:
-        eng_episode_deets = tvdb.get_episode_translation(rand_episode["id"], "eng")
+        eng_episode_deets = tvdb.get_episode_translation(episode["id"], "eng")
     except KeyError:
         eng_episode_deets = "None"
 
-    return show, rand_episode, eng_name, eng_episode_deets
+    return show, episode, eng_name, eng_episode_deets
 
 # if __name__ == "__main__":
 #     # print(tvdb.search("The West Wing"))
