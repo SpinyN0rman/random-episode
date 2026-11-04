@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from . import utils
 from .forms import ContactForm
@@ -25,11 +25,18 @@ def random_episode(request):
     show = "None"
     eng_name = "None"
     eng_episode_deets = "None"
+    show_id = ""
     if request.method == "GET":
         show_id = request.GET.get("show_id", "")
-        if show_id != "":
-            show, episode, eng_name, eng_episode_deets = utils.tvdb_episodes(show_id)
-    return render(request, "random_episode.html", {'show': show, 'episode': episode, 'eng_name': eng_name, 'eng_episode_deets': eng_episode_deets})
+        season_id = request.GET.get("season_id", "")
+        episode_num = request.GET.get("episode_num", "")
+        if season_id != "" and episode_num != "":
+            show, episode, eng_name, eng_episode_deets = utils.tvdb_episode_load(show_id, season_id, episode_num)
+        elif show_id != "":
+            season_id, episode_num = utils.tvdb_episodes(show_id)
+            url = f"{request.path}?{request.GET.urlencode()}&season_id={season_id}&episode_num={episode_num}"
+            return redirect(url)
+    return render(request, "random_episode.html", {'show_id': show_id, 'show': show, 'episode': episode, 'eng_name': eng_name, 'eng_episode_deets': eng_episode_deets})
 
 
 class AboutView(generic.TemplateView):
