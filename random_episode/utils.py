@@ -1,5 +1,6 @@
 import os, random
 import tvdb_v4_official
+import requests
 
 tvdb_api = os.getenv("TVDB_API_KEY")
 tvdb = tvdb_v4_official.TVDB(tvdb_api)
@@ -64,6 +65,61 @@ def tvdb_episode_load(show_id, season_id, episode_num):
         eng_episode_deets = "None"
 
     return show, episode, eng_name, eng_episode_deets
+
+
+def trending():
+    response = requests.get('https://test.northrop.uk/bot/trending_shows.json')
+    resp_json = response.json()
+    show_ids: list = resp_json.get('trending_series', '')
+    shows: list = []
+
+    for show_id in show_ids:
+        show_info = tvdb.get_series(show_id)
+        show = {
+            "show_name": show_info['name'],
+            "show_id": show_id,
+            "show_art": show_info['image']
+        }
+        shows.append(show)
+    return shows[:8]
+
+def trending_to_string(trending_shows):
+    trending_string: str = ''
+    for show in trending_shows:
+        trending_string += f"{show['show_name']}&&{show['show_id']}&&{show['show_art']}!!"
+    trending_string = trending_string.replace(' ', '^^')
+    trending_string = trending_string.strip('!!')
+    return trending_string
+
+def trending_from_string(trending_cookie):
+    if trending_cookie == '':
+        return ''
+    else:
+        trending_cookie = trending_cookie.replace('^^', ' ')
+        shows: list = []
+        chunks = trending_cookie.split('!!')
+        for chunk in chunks:
+            bits = chunk.split('&&')
+            show = {
+                "show_name": bits[0],
+                "show_id": bits[1],
+                "show_art": bits[2]
+            }
+            shows.append(show)
+        return shows
+
+def recents(ids):
+    shows: list = []
+    if ids != '':
+        for show_id in ids:
+            show_info = tvdb.get_series(show_id)
+            show = {
+                "show_name": show_info['name'],
+                "show_id": show_id,
+                "show_art": show_info['image']
+            }
+            shows.append(show)
+    return shows[:8]
 
 # if __name__ == "__main__":
 #     # print(tvdb.search("The West Wing"))
