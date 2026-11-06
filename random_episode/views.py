@@ -7,8 +7,21 @@ from django.core.mail import EmailMessage
 from django.core.mail import send_mail
 import os
 
-class HomePageView(generic.TemplateView):
-    template_name = 'home.html'
+
+def home(request):
+    recents_cookie = [r for r in request.COOKIES.get('recents', '').split(',') if r.isdigit()]
+    recent_shows = utils.recents(recents_cookie)
+    if 'trending' not in request.COOKIES:
+        trending_shows = utils.trending()
+        trending_string = utils.trending_to_string(trending_shows)
+        response = render(request, "home.html", {'trending_shows': trending_shows, 'recent_shows': recent_shows})
+        response.set_cookie('trending', trending_string, max_age=60 * 60 * 12)
+        return response
+    else:
+        trending_cookie = request.COOKIES.get('trending', '')
+        trending_shows = utils.trending_from_string(trending_cookie)
+        response = render(request, "home.html", {'trending_shows': trending_shows, 'recent_shows':recent_shows})
+        return response
 
 
 def search_results(request):
@@ -20,7 +33,9 @@ def search_results(request):
             results = utils.tvdb_search(query)
     return render(request, "search_results.html", {'results': results, 'query': query})
 
+
 def random_episode(request):
+    recents_cookie = [r for r in request.COOKIES.get('recents', '').split(',') if r.isdigit()]
     episode = "None"
     show = "None"
     eng_name = "None"
@@ -30,13 +45,30 @@ def random_episode(request):
         show_id = request.GET.get("show_id", "")
         season_id = request.GET.get("season_id", "")
         episode_num = request.GET.get("episode_num", "")
+
+        if show_id.isdigit():
+            recents_cookie = [show_id] + [r for r in recents_cookie if r != show_id]
+            recents_cookie = recents_cookie[:8]
+
         if season_id != "" and episode_num != "":
             show, episode, eng_name, eng_episode_deets = utils.tvdb_episode_load(show_id, season_id, episode_num)
         elif show_id != "":
             season_id, episode_num = utils.tvdb_episodes(show_id)
             url = f"{request.path}?{request.GET.urlencode()}&season_id={season_id}&episode_num={episode_num}"
-            return redirect(url)
-    return render(request, "random_episode.html", {'show_id': show_id, 'show': show, 'episode': episode, 'eng_name': eng_name, 'eng_episode_deets': eng_episode_deets})
+            response = redirect(url)
+            response.set_cookie('recents', ','.join(recents_cookie), max_age=60 * 60 * 24 * 365)
+            return response
+
+    response = render(request, "random_episode.html", {
+        'show_id': show_id,
+        'show': show,
+        'episode': episode,
+        'eng_name': eng_name,
+        'eng_episode_deets': eng_episode_deets,
+        'recents': recents_cookie,
+    })
+    response.set_cookie('recents', ','.join(recents_cookie), max_age=60 * 60 * 24 * 365)
+    return response
 
 
 class AboutView(generic.TemplateView):

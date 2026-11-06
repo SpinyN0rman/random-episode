@@ -4,4 +4,22 @@
 {% block content %}
 <h1>Search for a show</h1>
 {% include 'search_macro.html' %}
+
+{% if recent_shows %}
+    <h2>Your Recent Shows</h2>
+    <div class="clearfix mb-4">
+    {% for recent_show in recent_shows %}
+        <a href="{% url 'random_episode' %}?show_id={{ recent_show.show_id }}"><img class="col-4 col-md-3 float-start mb-3 me-3 me-md-0 pe-md-3" src="{{ recent_show.show_art }}"></a>
+    {% endfor %}
+    </div>
+{% endif %}
+
+{% if trending_shows %}
+    <h2>Trending Shows</h2>
+    <div class="clearfix">
+    {% for trending_show in trending_shows %}
+        <a href="{% url 'random_episode' %}?show_id={{ trending_show.show_id }}"><img class="col-4 col-md-3 float-start mb-3 me-3 me-md-0 pe-md-3" src="{{ trending_show.show_art }}"></a>
+    {% endfor %}
+    </div>
+{% endif %}
 {% endblock %}
